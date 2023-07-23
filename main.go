@@ -14,11 +14,9 @@ func main() {
 
 	gin_setup.RootRouters(router)
 
-	router.Run()
-
 	// Start server
 	fmt.Println("Server started on http://localhost:8000")
-	if err := router.Run(":" + "8000"); err != nil {
+	if err := router.Run(":8000"); err != nil {
 		fmt.Println("err:", err)
 	}
 }
