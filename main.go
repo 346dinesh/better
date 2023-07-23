@@ -2,17 +2,23 @@ package main
 
 import (
 	"fmt"
-	"net/http"
+
+	"github.com/346dinesh/better/gin_setup"
+	"github.com/gin-gonic/gin"
+
+	_ "github.com/lib/pq"
 )
 
 func main() {
-	fmt.Printf("running")
-	http.HandleFunc("/myhandler", myHandler)
-	http.ListenAndServe(":8080", nil)
-}
+	router := gin.Default()
 
-func myHandler(w http.ResponseWriter, r *http.Request) {
-	// Execute your API calls here
-	fmt.Println("Button clicked!")
-	// You can make API calls or perform any other operations
+	gin_setup.RootRouters(router)
+
+	router.Run()
+
+	// Start server
+	fmt.Println("Server started on http://localhost:8000")
+	if err := router.Run(":" + "8000"); err != nil {
+		fmt.Println("err:", err)
+	}
 }
