@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/346dinesh/better/database"
 	"github.com/346dinesh/better/internal"
 	"github.com/gin-gonic/gin"
 )
@@ -35,25 +36,17 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func authenticateUser(email, password, org string) *int64 {
-	var db *sql.DB
-
-	// Connect to the Supabase database
-	db, err := sql.Open("postgres", "postgres://postgres:5HPHCU-$rcuQu2_@db.czgqvzsctxzzgbmsjzjy.supabase.co:6543/postgres")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
 
 	// Query Supabase to authenticate user and retrieve organization
 	// Replace this with your own Supabase query logic
-
-	query := `SELECT id FROM user_credentials WHERE user_mail = $1 AND user_password = $2 AND user_org=$3`
-	var id int64
-	if db == nil {
+	if database.SupabaseDB == nil {
 		fmt.Println("db empty")
 		return nil
 	}
-	err = db.QueryRow(query, email, password, org).Scan(&id)
+	query := `SELECT id FROM user_credentials WHERE user_mail = $1 AND user_password = $2 AND user_org=$3`
+	var id int64
+
+	err := database.SupabaseDB.QueryRow(query, email, password, org).Scan(&id)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			// Handle case when no rows were returned by the query

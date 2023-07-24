@@ -11,6 +11,7 @@ func RootRouters(route *gin.Engine) {
 	route.GET("/ping", pingHandler)
 	// Routes
 	route.POST("/login", handlers.LoginHandler)
+	route.POST("/dashboard", handlers.DashBaordHandler)
 
 }
 
